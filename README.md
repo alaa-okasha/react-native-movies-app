@@ -1,50 +1,99 @@
-# Welcome to your Expo app 👋
+# 🎬 MovieApp
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+A React Native mobile application for discovering and searching movies, built with Expo, powered by the TMDB API, and featuring trending analytics via Appwrite.
 
-## Get started
+<p align="center">
+  <img src="./screenshots/home.jpeg" width="300"/>
+  <img src="./screenshots/details.jpeg" width="300"/>
+  <img src="./screenshots/search.jpeg" width="300"/>
+</p>
 
-1. Install dependencies
+## Features
 
-   ```bash
-   npm install
-   ```
+- **Home Screen** — Browse the latest popular movies and view trending titles based on real search data
+- **Search** — Debounced movie search powered by the TMDB API, with search analytics tracked in Appwrite
+- **Movie Details** — Full detail view including overview, genres, budget, revenue, runtime, and production companies
+- **Trending Movies** — Dynamically ranked based on how often users search for a film
+- **Tab Navigation** — Home, Search, Saved, and Profile tabs with a custom floating tab bar
 
-2. Start the app
+## Tech Stack
 
-   ```bash
-   npx expo start
-   ```
+| Tool                                                     | Purpose                                    |
+| -------------------------------------------------------- | ------------------------------------------ |
+| [Expo](https://expo.dev) / React Native                  | Mobile framework                           |
+| [Expo Router](https://expo.github.io/router)             | File-based navigation                      |
+| [TMDB API](https://www.themoviedb.org/documentation/api) | Movie data                                 |
+| [Appwrite](https://appwrite.io)                          | Backend — search count tracking & trending |
+| [NativeWind](https://www.nativewind.dev)                 | Tailwind CSS for React Native              |
 
-In the output, you'll find options to open the app in a
+## Project Structure
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+```
+app/
+├── (tabs)/
+│   ├── _layout.tsx       # Tab bar configuration
+│   ├── index.tsx         # Home screen
+│   ├── search.tsx        # Search screen
+│   ├── saved.tsx         # Saved screen
+│   └── profile.tsx       # Profile screen
+├── movies/
+│   └── [id].tsx          # Movie detail screen
+└── _layout.tsx           # Root layout
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+components/
+├── MovieCard.tsx         # Grid movie card
+├── TrendingCard.tsx      # Horizontal trending card with rank number
+└── SearchBar.tsx         # Reusable search input
 
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
+services/
+├── api.ts                # TMDB API calls
+├── appwrite.ts           # Appwrite DB interactions
+└── useFetch.ts           # Generic data fetching hook
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+## Getting Started
 
-## Learn more
+### Prerequisites
 
-To learn more about developing your project with Expo, look at the following resources:
+- Node.js 18+
+- Expo CLI (`npm install -g expo-cli`)
+- A [TMDB API key](https://www.themoviedb.org/settings/api)
+- An [Appwrite](https://cloud.appwrite.io) project with a collection set up
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+### Environment Variables
 
-## Join the community
+Create a `.env` file in the project root:
 
-Join our community of developers creating universal apps.
+```env
+EXPO_PUBLIC_MOVIE_API_KEY=your_tmdb_api_key
+EXPO_PUBLIC_APPWRITE_PROJECT_ID=your_appwrite_project_id
+EXPO_PUBLIC_APPWRITE_DATABASE_ID=your_appwrite_database_id
+EXPO_PUBLIC_APPWRITE_COLLECTION_ID=your_appwrite_collection_id
+```
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+### Appwrite Collection Schema
+
+Create a collection with the following attributes:
+
+| Attribute    | Type    |
+| ------------ | ------- |
+| `searchTerm` | String  |
+| `movie_id`   | Integer |
+| `title`      | String  |
+| `count`      | Integer |
+| `poster_url` | String  |
+
+### Installation
+
+```bash
+npm install
+npx expo start
+```
+
+## How Trending Works
+
+Every time a user searches for a movie and results are returned, the app calls `updateSearchCount` which either creates a new document or increments the `count` for that search term in Appwrite. The `getTrendingMovies` function then retrieves the top 5 most-searched movies to display on the home screen.
+
+## License
+
+MIT
