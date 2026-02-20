@@ -1,9 +1,3 @@
-import MovieCard from "@/components/MovieCard";
-import SearchBar from "@/components/SearchBar";
-import { icons } from "@/constants/icons";
-import { images } from "@/constants/images";
-import { fetchMovies } from "@/services/api";
-import useFetch from "@/services/useFetch";
 import { useRouter } from "expo-router";
 import {
   ActivityIndicator,
@@ -14,8 +8,25 @@ import {
   View,
 } from "react-native";
 
-export default function Index() {
+import { fetchMovies } from "@/services/api";
+import { getTrendingMovies } from "@/services/appwrite";
+
+import { icons } from "@/constants/icons";
+import { images } from "@/constants/images";
+
+import MovieCard from "@/components/MovieCard";
+import SearchBar from "@/components/SearchBar";
+import TrendingCard from "@/components/TrendingCard";
+import useFetch from "@/services/useFetch";
+
+const Index = () => {
   const router = useRouter();
+
+  const {
+    data: trendingMovies,
+    loading: trendingLoading,
+    error: trendingError,
+  } = useFetch(getTrendingMovies);
 
   const {
     data: movies,
@@ -27,9 +38,10 @@ export default function Index() {
     <View className="flex-1 bg-primary">
       <Image
         source={images.bg}
-        className="w-full absolute z-0"
+        className="absolute w-full z-0"
         resizeMode="cover"
       />
+
       <ScrollView
         className="flex-1 px-5"
         showsVerticalScrollIndicator={false}
@@ -37,14 +49,14 @@ export default function Index() {
       >
         <Image source={icons.logo} className="w-12 h-10 mt-20 mb-5 mx-auto" />
 
-        {moviesLoading ? (
+        {moviesLoading || trendingLoading ? (
           <ActivityIndicator
             size="large"
             color="#0000ff"
             className="mt-10 self-center"
           />
-        ) : moviesError ? (
-          <Text>Error: {moviesError?.message}</Text>
+        ) : moviesError || trendingError ? (
+          <Text>Error: {moviesError?.message || trendingError?.message}</Text>
         ) : (
           <View className="flex-1 mt-5">
             <SearchBar
@@ -54,7 +66,7 @@ export default function Index() {
               placeholder="Search for a movie"
             />
 
-            {/* {trendingMovies && (
+            {trendingMovies && (
               <View className="mt-10">
                 <Text className="text-lg text-white font-bold mb-3">
                   Trending Movies
@@ -74,7 +86,7 @@ export default function Index() {
                   ItemSeparatorComponent={() => <View className="w-4" />}
                 />
               </View>
-            )} */}
+            )}
 
             <>
               <Text className="text-lg text-white font-bold mt-5 mb-3">
@@ -101,4 +113,6 @@ export default function Index() {
       </ScrollView>
     </View>
   );
-}
+};
+
+export default Index;
