@@ -3,9 +3,9 @@
 A React Native mobile application for discovering and searching movies, built with Expo, powered by the TMDB API, and featuring trending analytics via Appwrite.
 
 <p align="center">
-  <img src="./screenshots/home.jpeg" width="300"/>
-  <img src="./screenshots/details.jpeg" width="300"/>
-  <img src="./screenshots/search.jpeg" width="300"/>
+  <img src="./screenshots/home.jpeg" width="30%" />
+  <img src="./screenshots/details.jpeg" width="30%" />
+  <img src="./screenshots/search.jpeg" width="30%" />
 </p>
 
 ## Features
