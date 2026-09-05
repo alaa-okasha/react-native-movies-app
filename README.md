@@ -1,6 +1,6 @@
 # 🎬 MovieApp
 
-A React Native mobile application for discovering and searching movies, built with Expo, powered by the TMDB API, and featuring trending analytics via Appwrite.
+A modern React Native mobile application for discovering, searching, and exploring movies. Built with **Expo** and powered by the **TMDB API**, with **Appwrite** used for search analytics and dynamic trending movies.
 
 <p align="center">
   <img src="./screenshots/home.jpeg" width="30%" />
@@ -8,59 +8,98 @@ A React Native mobile application for discovering and searching movies, built wi
   <img src="./screenshots/search.jpeg" width="30%" />
 </p>
 
-## Features
+## 📱 Download
 
-- **Home Screen** — Browse the latest popular movies and view trending titles based on real search data
-- **Search** — Debounced movie search powered by the TMDB API, with search analytics tracked in Appwrite
-- **Movie Details** — Full detail view including overview, genres, budget, revenue, runtime, and production companies
-- **Trending Movies** — Dynamically ranked based on how often users search for a film
-- **Tab Navigation** — Home, Search, Saved, and Profile tabs with a custom floating tab bar
+<a href="https://github.com/alaa-okasha/react-native-movies-app/releases/download/v1.0.0/application-f610c829-7242-46c4-8c1d-c3ccb6b70bbc.apk">
+  <img src="https://img.shields.io/badge/Download-APK-brightgreen?style=for-the-badge&logo=android" alt="Download APK" />
+</a>
 
-## Tech Stack
+> **Android only:** Download and install the APK directly on your Android device.
 
-| Tool                                                     | Purpose                                    |
-| -------------------------------------------------------- | ------------------------------------------ |
-| [Expo](https://expo.dev) / React Native                  | Mobile framework                           |
-| [Expo Router](https://expo.github.io/router)             | File-based navigation                      |
-| [TMDB API](https://www.themoviedb.org/documentation/api) | Movie data                                 |
-| [Appwrite](https://appwrite.io)                          | Backend — search count tracking & trending |
-| [NativeWind](https://www.nativewind.dev)                 | Tailwind CSS for React Native              |
+## ✨ Features
 
-## Project Structure
+* **Home Screen** — Browse popular movies and discover dynamically trending titles.
+* **Search** — Search for movies using a debounced search powered by the TMDB API.
+* **Search Analytics** — Search activity is tracked with Appwrite to generate real-time trending results.
+* **Movie Details** — View detailed information including overview, genres, budget, revenue, runtime, and production companies.
+* **Trending Movies** — Movies are dynamically ranked based on how frequently users search for them.
+* **Saved Movies** — Save movies for quick access later.
+* **Tab Navigation** — Home, Search, Saved, and Profile tabs with a custom floating tab bar.
+* **Responsive UI** — Clean and mobile-friendly interface built specifically for React Native.
 
-```
+## 🛠️ Tech Stack
+
+| Technology                                                | Purpose                                      |
+| --------------------------------------------------------- | -------------------------------------------- |
+| [Expo](https://expo.dev/) / React Native                  | Mobile application framework                 |
+| [Expo Router](https://docs.expo.dev/router/introduction/) | File-based navigation                        |
+| [TMDB API](https://developer.themoviedb.org/docs)         | Movie data and search                        |
+| [Appwrite](https://appwrite.io/)                          | Backend, search analytics, and trending data |
+| [NativeWind](https://www.nativewind.dev/)                 | Tailwind CSS styling for React Native        |
+
+## 📂 Project Structure
+
+```text
 app/
 ├── (tabs)/
 │   ├── _layout.tsx       # Tab bar configuration
 │   ├── index.tsx         # Home screen
 │   ├── search.tsx        # Search screen
-│   ├── saved.tsx         # Saved screen
+│   ├── saved.tsx         # Saved movies screen
 │   └── profile.tsx       # Profile screen
 ├── movies/
 │   └── [id].tsx          # Movie detail screen
 └── _layout.tsx           # Root layout
 
 components/
-├── MovieCard.tsx         # Grid movie card
-├── TrendingCard.tsx      # Horizontal trending card with rank number
-└── SearchBar.tsx         # Reusable search input
+├── MovieCard.tsx          # Grid movie card
+├── TrendingCard.tsx       # Horizontal trending card
+└── SearchBar.tsx          # Reusable search input
 
 services/
-├── api.ts                # TMDB API calls
-├── appwrite.ts           # Appwrite DB interactions
-└── useFetch.ts           # Generic data fetching hook
+├── api.ts                 # TMDB API calls
+├── appwrite.ts            # Appwrite database interactions
+└── useFetch.ts            # Generic data fetching hook
 ```
 
-## Getting Started
+## 🚀 Getting Started
 
 ### Prerequisites
 
-- Node.js 18+
-- Expo CLI (`npm install -g expo-cli`)
-- A [TMDB API key](https://www.themoviedb.org/settings/api)
-- An [Appwrite](https://cloud.appwrite.io) project with a collection set up
+Make sure you have the following installed:
 
-### Environment Variables
+* Node.js 18+
+* Expo
+* A [TMDB API key](https://www.themoviedb.org/settings/api)
+* An [Appwrite](https://cloud.appwrite.io/) project with the required database collection
+
+### Installation
+
+Clone the repository:
+
+```bash
+git clone https://github.com/alaa-okasha/react-native-movies-app.git
+```
+
+Navigate to the project:
+
+```bash
+cd react-native-movies-app
+```
+
+Install dependencies:
+
+```bash
+npm install
+```
+
+Start the development server:
+
+```bash
+npx expo start
+```
+
+## 🔐 Environment Variables
 
 Create a `.env` file in the project root:
 
@@ -71,9 +110,11 @@ EXPO_PUBLIC_APPWRITE_DATABASE_ID=your_appwrite_database_id
 EXPO_PUBLIC_APPWRITE_COLLECTION_ID=your_appwrite_collection_id
 ```
 
-### Appwrite Collection Schema
+> **Note:** Do not commit your `.env` file or API credentials to the repository.
 
-Create a collection with the following attributes:
+## 🗄️ Appwrite Collection Schema
+
+Create an Appwrite collection with the following attributes:
 
 | Attribute    | Type    |
 | ------------ | ------- |
@@ -83,17 +124,34 @@ Create a collection with the following attributes:
 | `count`      | Integer |
 | `poster_url` | String  |
 
-### Installation
+## 📈 How Trending Works
 
-```bash
-npm install
-npx expo start
-```
+MovieApp uses Appwrite to generate dynamically trending movies based on user search activity.
 
-## How Trending Works
+When a user searches for a movie:
 
-Every time a user searches for a movie and results are returned, the app calls `updateSearchCount` which either creates a new document or increments the `count` for that search term in Appwrite. The `getTrendingMovies` function then retrieves the top 5 most-searched movies to display on the home screen.
+1. The app sends the search request to the TMDB API.
+2. When results are returned, the search term is recorded in Appwrite.
+3. If the movie already exists, its search `count` is incremented.
+4. The app retrieves the most searched movies.
+5. The top 5 movies are displayed in the **Trending** section.
 
-## License
+This allows the trending section to be based on **actual user search activity** rather than static or predefined data.
 
-MIT
+## 📸 Screenshots
+
+<p align="center">
+  <img src="./screenshots/home.jpeg" width="30%" />
+  <img src="./screenshots/details.jpeg" width="30%" />
+  <img src="./screenshots/search.jpeg" width="30%" />
+</p>
+
+## 👨‍💻 Author
+
+**Alaa Okasha**
+
+Built with ❤️ using React Native, Expo, TMDB API, and Appwrite.
+
+## 📄 License
+
+This project is licensed under the MIT License.
